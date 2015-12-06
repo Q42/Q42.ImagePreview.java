@@ -1,0 +1,23 @@
+language: android
+cache: false
+sudo: false
+
+jdk:
+  - oraclejdk8
+
+cache:
+  directories:
+  - $HOME/.gradle
+
+android:
+  licenses:
+    # Accept all licenses
+    - '.+'
+
+  components:
+    - extra-android-support
+    - extra-android-m2repository
+    - build-tools-23.0.1
+    - android-23
+
+script: touch local.properties && ./gradlew test
