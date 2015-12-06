@@ -18,7 +18,46 @@ compile 'com.q42:image-preview:0.1.0'
 
 ## Usage
 
+### Getting and setting a header
 
+```java
+if (ImagePreview.getHeader() == null) {
+    ImagePreview.setHeader("YOUR STRING HEADER HERE");
+}
+```
+
+### Getting a (blurry) drawable
+
+```java
+// With 2f (float) amount of blur
+ImagePreview.drawableFromString("YOUR IMAGE STRING", context, 2f);
+// or without blur
+ImagePreview.drawableFromString("YOUR IMAGE STRING", context);
+```
+
+### Getting the clean bitmap
+
+There is no blurring going on here. Furthermore, this method is used internally for the (blurry) drawable.
+But if you wish to get the freshly generated bitmap before any processing, then here you go.
+
+```java
+ImagePreview.bitmapFromString("YOUR IMAGE STRING");
+```
+
+## Example
+
+This is one way to go about and use it. 
+
+```java
+    private Drawable getPreviewDrawable(String imageThumb) throws IOException {
+
+        if (ImagePreview.getHeader() == null) {
+            String imageThumbHeader = getContext().getString(R.string.preview_image_header);
+            ImagePreview.setHeader(imageThumbHeader);
+        }
+        return ImagePreview.drawableFromString(imageThumb, context, 2f);
+    }
+```
 
 ## Authors
 
