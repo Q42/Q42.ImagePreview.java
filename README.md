@@ -13,54 +13,33 @@ You can find the [.NET server component on Github](https://github.com/Q42/Q42.Im
 ImagePreview is available through jCenter. To install it, simply add the following line to your build.gradle dependencies:
 
 ```
-compile 'com.q42:image-preview:0.1.0'
+compile 'com.q42:image-preview:0.2.0'
 ```
 
 ## Usage
 
-### Getting and setting a header
-
-```java
-if (ImagePreview.getHeader() == null) {
-    ImagePreview.setHeader("YOUR STRING HEADER HERE");
-}
+### Kotlin
+You can call a extension method on the `Context`
+```kotlin
+val bitmap = previewBitmap("Your Base64 encoded preview")
+image_view.setImageBitmap(bitmap)
+```
+or 
+```kotlin
+val drawable = previewDrawable("Your Base64 encoded preview")
 ```
 
-### Getting a (blurry) drawable
+*These methods will never fail. If anything goes wrong they return `null`*
 
-```java
-// With 2f (float) amount of blur
-ImagePreview.drawableFromString("YOUR IMAGE STRING", context, 2f);
-// or without blur
-ImagePreview.drawableFromString("YOUR IMAGE STRING", context);
+### Java
+In Java you can call
 ```
-
-### Getting the clean bitmap
-
-There is no blurring going on here. Furthermore, this method is used internally for the (blurry) drawable.
-But if you wish to get the freshly generated bitmap before any processing, then here you go.
-
-```java
-ImagePreview.bitmapFromString("YOUR IMAGE STRING");
-```
-
-## Example
-
-This is one way to go about and use it. 
-
-```java
-    private Drawable getPreviewDrawable(String imageThumb) throws IOException {
-
-        if (ImagePreview.getHeader() == null) {
-            String imageThumbHeader = getContext().getString(R.string.preview_image_header);
-            ImagePreview.setHeader(imageThumbHeader);
-        }
-        return ImagePreview.drawableFromString(imageThumb, context, 2f);
-    }
+Bitmap bitmap = ImagePreview.previewBitmap(context, "Your Base64 encoded preview");
+Drawable drawable = ImagePreview.previewDrawable(context, "Your Base64 encoded preview");
 ```
 
 ## Authors
-
+* Thijs Suijten, thijs@q42.nl (port to Android - Kotlin)
 * Tim van Steenis, tims@q42.nl
 * Jimmy Aupperlee, jimmy@q42.nl (port to Android)
 
