@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.q42.android.imagepreview'
 
 android {
     compileSdkVersion 23
@@ -9,7 +12,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "0.2.0"
     }
     buildTypes {
         release {
@@ -29,34 +32,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'image-preview'
-
-    publishedGroupId = 'com.q42'
-    libraryName = 'image-preview'
-    artifact = 'image-preview'
-
-    libraryDescription = 'This is the client library for rendering the image previews.'
-
-    siteUrl = 'https://github.com/Q42/Q42.ImagePreview.java'
-    gitUrl = 'https://github.com/Q42/Q42.ImagePreview.java.git'
-
-    libraryVersion = '0.2.0'
-
-    developerId = 'shapoc'
-    developerName = 'Jimmy Aupperlee'
-    developerEmail = 'j.aup.gt@gmail.com'
-
-    licenseName = 'The MIT License (MIT) Copyright (c) 2015 Q42'
-    licenseUrl = 'https://github.com/Q42/Qlassified-Android/blob/master/LICENSE'
-    allLicenses = ["MIT"]
-}
-
-apply plugin: 'com.jfrog.bintray'
-
-version = libraryVersion
-
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
@@ -71,38 +46,12 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
+
 artifacts {
     archives javadocJar
     archives sourcesJar
 }
 
-bintray {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-            gpg {
-                sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = properties.getProperty("bintray.gpg.password")
-                //Optional. The passphrase for GPG signing'
-            }
-        }
-    }
-}
 repositories {
     mavenCentral()
 }
