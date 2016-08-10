@@ -41,11 +41,16 @@ private val headers = mapOf(1 to "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwkHBgoJCA
     }
 }
 
+private var rs: RenderScript? = null
+
 @SuppressLint("NewApi")
 private fun renderScriptBlur(bitmap: Bitmap, blurRadius: Int, context: Context): Bitmap? {
     val blurred = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
 
-    val rs = RenderScript.create(context)
+    if (rs == null) {
+        rs = RenderScript.create(context)
+    }
+
     val theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
     val tmpOut = Allocation.createFromBitmap(rs, blurred)
 
@@ -54,7 +59,6 @@ private fun renderScriptBlur(bitmap: Bitmap, blurRadius: Int, context: Context):
     theIntrinsic.forEach(tmpOut)
 
     tmpOut.copyTo(blurred)
-
     return blurred
 }
 
