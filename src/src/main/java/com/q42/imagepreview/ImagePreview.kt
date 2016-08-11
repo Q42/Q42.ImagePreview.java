@@ -31,35 +31,12 @@ private val headers = mapOf(1 to "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwkHBgoJCA
     }
 
     return try {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            renderScriptBlur(bitmap, blurRadius, this)
-        } else {
-            stackBlur(bitmap, blurRadius)
-        }
+        /// RenderScript seems really slow to initialize. Also crashes when multiple instances are created.
+        /// Just use stackblur for now. Should come up with a better solution. Maybe GPU?
+        stackBlur(bitmap, blurRadius)
     } catch(e: Exception) {
         null
     }
-}
-
-private var rs: RenderScript? = null
-
-@SuppressLint("NewApi")
-private fun renderScriptBlur(bitmap: Bitmap, blurRadius: Int, context: Context): Bitmap? {
-    val blurred = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
-
-    if (rs == null) {
-        rs = RenderScript.create(context)
-    }
-
-    val theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
-    val tmpOut = Allocation.createFromBitmap(rs, blurred)
-
-    theIntrinsic.setRadius(blurRadius.toFloat())
-    theIntrinsic.setInput(Allocation.createFromBitmap(rs, bitmap))
-    theIntrinsic.forEach(tmpOut)
-
-    tmpOut.copyTo(blurred)
-    return blurred
 }
 
 private fun bitmapFromString(bodyString: String): Bitmap? {
